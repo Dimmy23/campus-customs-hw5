@@ -1,0 +1,21 @@
+/* Viewport guardrails: the dashboard should never create horizontal page scroll. */
+html, body, #root { width: 100%; overflow-x: hidden; }
+.shell { overflow-x: hidden; }
+main { width: 100%; min-width: 0; overflow: hidden; }
+.workspace { grid-template-columns: minmax(240px, 280px) minmax(0, 1fr); min-width: 0; }
+.detail, .agent-grid, .agent-card { min-width: 0; }
+.agent-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.agent-card p { overflow-wrap: anywhere; word-break: break-word; max-width: 100%; }
+.agent-top strong { min-width: 0; max-width: 100%; }
+.tool-list { max-width: 100%; overflow-wrap: anywhere; }
+.tool-list span { max-width: 100%; overflow-wrap: anywhere; word-break: break-word; }
+@media (max-width: 1080px) {
+  .workspace { grid-template-columns: 1fr; }
+  .ticket-list { position: static; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .section-head { grid-column: 1 / -1; margin-bottom: 0; }
+  .ticket-card { margin: 0; }
+  .agent-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@media (max-width: 650px) {
+  .agent-grid { grid-template-columns: 1fr; }
+}

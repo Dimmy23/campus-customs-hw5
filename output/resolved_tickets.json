@@ -1,0 +1,41 @@
+[
+  {
+    "id": 101,
+    "final_status": "resolved",
+    "short_outcome": "Size-S CC-TEE-WHITE stock was 0. Invoice 501 was open for $840.00 and linked to Bulldog Print Co; no reprint date or customer commitment was made.",
+    "agent_contributions": {
+      "boss": "Opened the ticket context, coordinated the work, and delegated to Accounting and Customer Service.",
+      "inventory": "Verified size-S quantity 0 and checked recorded alternative sizes.",
+      "accounting": "Verified invoice 501 and vendor 1, including the $840.00 amount, due date, status, and five-day listed vendor lead time.",
+      "customer_service": "Prepared a customer-safe response without promising a reprint or arrival date.",
+      "facilities": "Not needed for this merchandise ticket."
+    },
+    "human_approvals": []
+  },
+  {
+    "id": 102,
+    "final_status": "resolved",
+    "short_outcome": "Lease 1 confirmed $2,400 monthly rent for the Chapel Street shop due 2026-09-02. Payment status was unavailable and no payment was made.",
+    "agent_contributions": {
+      "boss": "Opened the ticket context and delegated to Accounting and Facilities.",
+      "facilities": "Verified the space, landlord, monthly rent, due date, and absence of lease notes; delegated accounting review.",
+      "accounting": "Confirmed the rent obligation but reported that the available MCP context could not verify cash or payment status.",
+      "inventory": "Reviewed the linked context but found no merchandise issue.",
+      "customer_service": "Kept the internal rent information out of customer-facing communication and routed the matter to human review."
+    },
+    "human_approvals": []
+  },
+  {
+    "id": 103,
+    "final_status": "resolved",
+    "short_outcome": "There were 8 size-M CC-HOOD-NAVY hoodies in Aisle A, 12 short of the requested 20. Pricing was $22 cost and $58 list; no discount or purchase was approved.",
+    "agent_contributions": {
+      "boss": "Opened ticket context and delegated to Accounting and Inventory.",
+      "inventory": "Verified 8 size-M units and calculated the 12-unit shortfall.",
+      "accounting": "Verified $22.00 unit cost and $58.00 list price and prepared illustrative pricing calculations only.",
+      "facilities": "Confirmed that the request was outside Facilities ownership and routed pricing and sourcing decisions to human review.",
+      "customer_service": "No final Customer Service finding was recorded in this run; no customer commitment was made."
+    },
+    "human_approvals": []
+  }
+]

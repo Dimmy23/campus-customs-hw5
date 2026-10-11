@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Customs — Ticket Desk</title>
+  <style>
+    :root { color-scheme: dark; --pink: #ff4fa3; --pink-soft: #ffb7dc; --ink: #0b0b10; --panel: #17131d; --muted: #b9adbc; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; font: 16px/1.55 Inter, ui-sans-serif, system-ui, sans-serif; color: #fff7fc; background: radial-gradient(circle at top right, #3b1733, var(--ink) 48%); }
+    main { width: min(1000px, 100% - 32px); margin: 0 auto; padding: 48px 0 64px; }
+    .eyebrow { color: var(--pink-soft); letter-spacing: .16em; text-transform: uppercase; font-size: .76rem; font-weight: 800; }
+    h1 { margin: 8px 0 8px; font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1; }
+    .intro { max-width: 720px; color: var(--muted); margin-bottom: 28px; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #43263b; padding-bottom: 14px; }
+    button { border: 1px solid #653653; border-radius: 999px; background: #1e1520; color: #ffe8f5; padding: 10px 17px; cursor: pointer; font: inherit; font-weight: 750; }
+    button:hover, button:focus-visible { border-color: var(--pink); outline: 3px solid #ff4fa344; }
+    button.active { background: var(--pink); color: #1b0712; border-color: var(--pink); }
+    .panel { display: none; margin-top: 26px; background: #17131dcc; border: 1px solid #492a40; border-radius: 24px; padding: clamp(22px, 5vw, 42px); box-shadow: 0 20px 70px #0008; }
+    .panel.active { display: block; }
+    h2 { margin: 0 0 4px; font-size: 1.7rem; }
+    h3 { color: var(--pink-soft); margin: 28px 0 10px; font-size: 1.05rem; text-transform: uppercase; letter-spacing: .1em; }
+    ul { padding-left: 22px; }
+    li { margin: 9px 0; }
+    .actual { min-height: 150px; border: 1px dashed #754461; border-radius: 14px; padding: 16px; color: var(--muted); background: #0e0c12aa; }
+    .later { color: var(--muted); border-left: 3px solid var(--pink); padding-left: 16px; }
+    .ticket-id { color: var(--pink); font-weight: 800; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">Campus Customs · Agent desk plan</div>
+    <h1>Open-ticket plan</h1>
+    <p class="intro">Expected team actions are recorded before the backend is run. The Actual sections are intentionally blank and will be completed after the agent team executes.</p>
+
+    <nav class="tabs" aria-label="Desk sections">
+      <button class="tab active" data-tab="ticket-101">Ticket 101</button>
+      <button class="tab" data-tab="ticket-102">Ticket 102</button>
+      <button class="tab" data-tab="ticket-103">Ticket 103</button>
+      <button class="tab" data-tab="cash">Cash</button>
+      <button class="tab" data-tab="reflection">Reflection</button>
+    </nav>
+
+    <section id="ticket-101" class="panel active" role="tabpanel">
+      <h2><span class="ticket-id">101</span> · Bulldog tee</h2>
+      <p>Customer order from Tauhid Zaman for SKU <code>CC-TEE-WHITE</code>, size S, quantity 1.</p>
+      <h3>Expected</h3>
+      <ul>
+        <li><strong>Order:</strong> Boss → Inventory → Accounting → Customer Service</li>
+        <li><strong>First call:</strong> Inventory, because we first want to confirm that size S is really out of stock (we expect 0). If it is, Accounting then checks the reprint to estimate when new shirts could arrive.</li>
+        <li><strong>Agents:</strong>
+          <ul>
+            <li><strong>Boss:</strong> opens ticket 101 to see the request and what is attached to it (invoice 501, a rush reprint). Tool: get_ticket_context.</li>
+            <li><strong>Inventory:</strong> checks how many size-S tees are in stock and which other sizes are available as alternatives. Tool: check_inventory.</li>
+            <li><strong>Accounting:</strong> checks invoice 501 (amount, due date, status) and looks up the printer and its usual lead time, to estimate roughly when size S could be back. Tools: get_ticket_context, get_vendor_details.</li>
+            <li><strong>Customer Service:</strong> writes a message to Tauhid: size S is out of stock, we will contact him when it is back, please reply with an email or phone number, and would he like a different size or another item instead. No promised dates. No tools; it uses what Inventory and Accounting found.</li>
+          </ul>
+        </li>
+        <li><strong>Not needed:</strong> Facilities, because this ticket has nothing to do with the lease or rent.</li>
+        <li><strong>Needs a person:</strong> the agents can't confirm whether or when the reprint will arrive (invoice 501 is unpaid and overdue), so the Boss flags this for a person to check with the printer.</li>
+        <li><strong>MCP tools expected:</strong> get_ticket_context, check_inventory, get_vendor_details. Not expected: list_open_tickets.</li>
+      </ul>
+      <h3>Actual</h3>
+      <div class="actual"><ul>
+        <li><strong>Agents worked:</strong> Boss, Inventory, Accounting, and Customer Service. Facilities was not needed.</li>
+        <li><strong>Delegation:</strong> Boss delegated to Accounting and Customer Service.</li>
+        <li><strong>Tools used:</strong> Boss used get_ticket_context, check_inventory, and get_vendor_details. Accounting used get_ticket_context and get_vendor_details. Customer Service used get_ticket_context. Inventory used check_inventory, get_ticket_context, get_vendor_details, and list_open_tickets.</li>
+        <li><strong>Outcome:</strong> MCP data confirmed size-S quantity 0; invoice 501 is open for $840.00 and linked to vendor 1, Bulldog Print Co. No reprint or arrival date was promised. Human review remains required.</li>
+      </ul></div>
+    </section>
+
+    <section id="ticket-102" class="panel" role="tabpanel">
+      <h2><span class="ticket-id">102</span> · Rent due</h2>
+      <p>Rent notice from Elm City Properties, linked to lease 1 for the Chapel Street shop.</p>
+      <h3>Expected</h3>
+      <ul>
+        <li><strong>Order:</strong> Boss → Facilities → Accounting</li>
+        <li><strong>First call:</strong> Facilities, because we first need to confirm from the lease record that rent is really due, how much, and when. Only then does Accounting look at the money side.</li>
+        <li><strong>Agents:</strong>
+          <ul>
+            <li><strong>Boss:</strong> opens ticket 102 to see the notice and the lease it links to. Tool: get_ticket_context.</li>
+            <li><strong>Facilities:</strong> confirms from lease 1 the space, landlord, monthly rent and next due date (we expect $2,400 due September 2). Tool: get_ticket_context.</li>
+            <li><strong>Accounting:</strong> checks whether the shop has enough cash for the rent and whether a rent payment is already recorded. None of the current MCP tools reads cash or payment records, so we expect Accounting to report that it can't verify this. Accounting does not pay or schedule the rent. Tool: get_ticket_context (for the rent amount).</li>
+          </ul>
+        </li>
+        <li><strong>Not needed:</strong> Inventory, because no products are involved. Customer Service, because there is no customer to reply to.</li>
+        <li><strong>Needs a person:</strong> paying the rent. The Boss flags the payment for a person to approve and make before September 2.</li>
+        <li><strong>MCP tools expected:</strong> get_ticket_context. Not expected: list_open_tickets, check_inventory, get_vendor_details.</li>
+      </ul>
+      <h3>Actual</h3>
+      <div class="actual"><ul>
+        <li><strong>Agents worked:</strong> Boss, Facilities, Accounting, Inventory, and Customer Service.</li>
+        <li><strong>Delegation:</strong> Boss delegated to Accounting and Facilities. Facilities delegated to Accounting. Inventory and Customer Service also delegated to Accounting during the run.</li>
+        <li><strong>Tools used:</strong> Boss did not use an MCP tool directly. Facilities, Accounting, Inventory, and Customer Service each used get_ticket_context. No other MCP tool was used.</li>
+        <li><strong>Outcome:</strong> Lease 1 confirmed the Chapel Street shop, Elm City Properties, $2,400 monthly rent, and a 2026-09-02 due date. Payment status was not verifiable from the available context. No payment was made; human approval remains required.</li>
+      </ul></div>
+    </section>
+
+    <section id="ticket-103" class="panel" role="tabpanel">
+      <h2><span class="ticket-id">103</span> · Bulk hoodie discount</h2>
+      <p>Price-override request from Yale AI Club for SKU <code>CC-HOOD-NAVY</code>, size M, quantity 20.</p>
+      <h3>Expected</h3>
+      <ul>
+        <li><strong>Order:</strong> Boss → Inventory → Accounting → Customer Service</li>
+        <li><strong>First call:</strong> Inventory, because we first need to confirm how many size-M hoodies we have (we expect 8) and how many we are short (we expect 12).</li>
+        <li><strong>Agents:</strong>
+          <ul>
+            <li><strong>Boss:</strong> opens ticket 103 to see the request. Tool: get_ticket_context.</li>
+            <li><strong>Inventory:</strong> confirms the size-M stock and the shortfall against the 20 requested. It does not order more. Tool: check_inventory.</li>
+            <li><strong>Accounting:</strong> uses the hoodie's unit cost and list price to calculate revenue and margin at full price and at a few possible discount levels. These are calculations only, not an approved discount. Tool: get_ticket_context (for pricing).</li>
+            <li><strong>Customer Service:</strong> writes the Yale AI Club a reply that acknowledges the request and says we are reviewing stock and pricing. No promised discount, reservation or delivery date. No tools.</li>
+          </ul>
+        </li>
+        <li><strong>Not needed:</strong> Facilities, because this ticket has nothing to do with the lease or rent.</li>
+        <li><strong>Needs a person:</strong> approving any discount, ordering the 12 missing hoodies, and giving an arrival date. No supplier is linked to the hoodie in the database, so the agents can't estimate when more would arrive.</li>
+        <li><strong>MCP tools expected:</strong> get_ticket_context, check_inventory. Not expected: list_open_tickets, get_vendor_details.</li>
+      </ul>
+      <h3>Actual</h3>
+      <div class="actual"><ul>
+        <li><strong>Agents worked:</strong> Boss, Inventory, Accounting, and Facilities. Customer Service was not present in the final recorded findings.</li>
+        <li><strong>Delegation:</strong> Boss delegated to Accounting and Inventory. Inventory delegated to Boss.</li>
+        <li><strong>Tools used:</strong> Boss used get_ticket_context. Inventory used get_ticket_context and check_inventory. Accounting used get_ticket_context and check_inventory. Facilities used get_ticket_context.</li>
+        <li><strong>Outcome:</strong> MCP data confirmed 8 size-M hoodies in Aisle A, leaving a shortfall of 12 against the requested 20. Pricing was $22 unit cost and $58 list price; discount scenarios were analysis only. No purchase or discount was approved.</li>
+      </ul></div>
+    </section>
+
+    <section id="cash" class="panel" role="tabpanel">
+      <h2>Cash</h2>
+      <h3>Verified cash ledger</h3>
+      <ul>
+        <li><strong>Starting checking balance after reset:</strong> $3,400.00.</li>
+        <li><strong>Ticket 101:</strong> $0.00 change. No payment or purchase was approved; invoice 501 was flagged for human review.</li>
+        <li><strong>Ticket 102:</strong> $0.00 change. Rent was identified as $2,400 due September 2, but no payment was approved or scheduled.</li>
+        <li><strong>Ticket 103:</strong> $0.00 change. No hoodie purchase or discount was approved; the 12-unit shortfall was flagged for human review.</li>
+        <li><strong>Ending checking balance:</strong> $3,400.00, matching <code>cash_accounts.balance</code> in the working database.</li>
+      </ul>
+    </section>
+
+    <section id="reflection" class="panel" role="tabpanel">
+      <h2>Reflection</h2>
+      <p class="later">This tab is ready for your reflection. Add your answers below.</p>
+      <h3>Reflection questions</h3>
+      <ol>
+        <li>How would you evaluate the performance of the agents on each ticket, and why?</li>
+        <li>For each ticket, how did Actual compare to the Expected plan you wrote earlier?</li>
+        <li>What would have been simpler as one agent with tools, and why?</li>
+        <li>Describe three new problems Campus Customs might face that this agent team could solve with the tools you built.</li>
+        <li>Describe three new problems Campus Customs might face that this agent team could not solve with the tools you built, and explain the tools and agents you would need to solve them.</li>
+      </ol>
+      <div id="reflection-answer" class="actual" contenteditable="true" aria-label="Reflection answer area">Write your reflection here…</div>
+      <button id="submit-reflection" type="button" style="margin-top:14px;">Submit reflection</button>
+      <span id="reflection-status" role="status" style="margin-left:12px;color:#79a68e;font-size:12px;"></span>
+      <p style="margin-top:14px;font-size:12px;color:#988c92;">Persistent copy: <a href="reflection.md">output/reflection.md</a></p>
+    </section>
+  </main>
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.panel');
+    tabs.forEach((tab) => tab.addEventListener('click', () => {
+      tabs.forEach((item) => item.classList.toggle('active', item === tab));
+      panels.forEach((panel) => panel.classList.toggle('active', panel.id === tab.dataset.tab));
+    }));
+    const reflectionAnswer = document.getElementById('reflection-answer');
+    const reflectionStatus = document.getElementById('reflection-status');
+    const savedReflection = localStorage.getItem('campus-customs-reflection');
+    if (savedReflection && reflectionAnswer) reflectionAnswer.innerHTML = savedReflection;
+    document.getElementById('submit-reflection')?.addEventListener('click', () => {
+      if (!reflectionAnswer || !reflectionStatus) return;
+      localStorage.setItem('campus-customs-reflection', reflectionAnswer.innerHTML);
+      reflectionStatus.textContent = 'Saved on this device.';
+    });
+  </script>
+</body>
+</html>
